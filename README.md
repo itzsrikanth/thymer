@@ -63,7 +63,7 @@ pip install .
 ```bash
 git clone https://github.com/itzsrikanth/thymer.git
 cd thymer
-make install-venv
+task install-venv
 source venv/bin/activate
 # Now you can run: thymer
 ```
@@ -73,8 +73,8 @@ source venv/bin/activate
 ```bash
 git clone https://github.com/itzsrikanth/thymer.git
 cd thymer
-make run-direct
-# or: pip install -r requirements.txt && python -m thymer
+task run-direct
+# or: pip install -r requirements.txt && python -m src
 ```
 
 ### Binary Release
@@ -110,19 +110,19 @@ thymer
 ```bash
 git clone https://github.com/itzsrikanth/thymer.git
 cd thymer
-make install  # or: pip install -e ".[dev]"
+task install  # or: pip install -e ".[dev]"
 ```
 
 ### Run
 
 ```bash
-make run  # or: python -m thymer
+task run  # or: python -m src
 ```
 
 ### Build Binary
 
 ```bash
-make build  # or: python build.py
+task build  # or: python build.py
 ```
 
 Binary will be in `dist/` directory.
@@ -130,10 +130,19 @@ Binary will be in `dist/` directory.
 ### Quick Commands
 
 ```bash
-make install    # Install in dev mode
-make run        # Run the app
-make build      # Build binary
-make clean      # Clean build artifacts
+task install    # Install in dev mode
+task run        # Run the app
+task build      # Build binary
+task clean      # Clean build artifacts
+task test       # Test imports
+task venv       # Create virtual environment
+task install-venv # Create venv and install
+task run-direct # Run without installing
+```
+
+**List all available tasks:**
+```bash
+task --list
 ```
 
 ## Contributing

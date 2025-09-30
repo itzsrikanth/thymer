@@ -33,6 +33,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "nuitka>=1.8.0",
+    "taskipy>=1.10.0",
 ]
 
 [project.scripts]
@@ -42,3 +43,13 @@ thymer = "src.app:main"
 Homepage = "https://github.com/itzsrikanth/thymer"
 Repository = "https://github.com/itzsrikanth/thymer"
 Issues = "https://github.com/itzsrikanth/thymer/issues"
+
+[tool.taskipy.tasks]
+install = "pip install -e '.[dev]'"
+run = "python3 -m src"
+build = "python3 build.py"
+clean = "rm -rf build/ dist/ *.egg-info/ thymer.build/ thymer.dist/ thymer.onefile-build/ && find . -type d -name __pycache__ -exec rm -rf {} + && find . -type f -name '*.pyc' -delete"
+test = "python3 -c 'from src import timer, storage, analytics; print(\"✅ All modules import successfully\")'"
+venv = "python3 -m venv venv && venv/bin/python3 -m pip install --upgrade pip && echo 'Virtual environment created. Activate with: source venv/bin/activate'"
+install-venv = "python3 -m venv venv && venv/bin/python3 -m pip install --upgrade pip && venv/bin/pip install -e '.[dev]' && echo 'Installed in virtual environment. Activate with: source venv/bin/activate'"
+run-direct = "pip install -r requirements.txt && python3 -m src"
