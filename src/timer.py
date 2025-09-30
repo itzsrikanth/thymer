@@ -3,6 +3,7 @@
 import time
 from typing import List, Optional
 from dataclasses import dataclass, field
+from datetime import datetime
 
 
 @dataclass
@@ -20,12 +21,15 @@ class Timer:
     elapsed: float = 0.0
     is_running: bool = False
     laps: List[Lap] = field(default_factory=list)
+    session_start: Optional[datetime] = None
     
     def start(self) -> None:
         """Start or resume the timer."""
         if not self.is_running:
             self.start_time = time.time()
             self.is_running = True
+            if self.session_start is None:
+                self.session_start = datetime.now()
     
     def pause(self) -> None:
         """Pause the timer."""
@@ -40,6 +44,7 @@ class Timer:
         self.elapsed = 0.0
         self.is_running = False
         self.laps.clear()
+        self.session_start = None
     
     def lap(self) -> None:
         """Record a lap/split."""

@@ -14,12 +14,12 @@ install-venv: venv
 	@echo "Installed in virtual environment. Activate with: source venv/bin/activate"
 
 run:
-	python3 -m thymer
+	python3 -m src
 
 # Run without installing (just install deps)
 run-direct:
 	pip install -r requirements.txt
-	python3 -m thymer
+	python3 -m src
 
 build:
 	python3 build.py

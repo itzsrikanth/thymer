@@ -35,7 +35,7 @@ def build_binary():
         "--include-package=textual",
         "--include-package=rich",
         "--remove-output",  # Clean build artifacts
-        "thymer/app.py",
+        "src/app.py",
     ]
     
     # Add platform-specific options
@@ -43,6 +43,7 @@ def build_binary():
         cmd.extend([
             "--macos-create-app-bundle",
             "--macos-app-name=Thymer",
+            "--static-libpython=no",  # Disable static libpython on macOS
         ])
     elif system == "windows":
         cmd.append("--windows-console-mode=attach")

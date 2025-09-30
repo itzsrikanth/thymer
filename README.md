@@ -12,6 +12,8 @@ A beautiful, interactive terminal-based timer app built for productive developer
 - ⌨️ Single-key controls
 - 🚀 Fast navigation with arrow keys
 - 📊 Lap/split tracking
+- 📈 Analytics & habit tracking
+- 💾 Persistent data storage
 - 🎨 Clean TUI interface
 - ⚡ Zero-config start
 
@@ -30,6 +32,20 @@ A beautiful, interactive terminal-based timer app built for productive developer
 
 Press Space to pause/play • L for lap • N for new timer
 ```
+
+## Data Storage
+
+Thymer automatically saves your timer sessions and analytics data:
+
+- **macOS**: `~/Library/Application Support/Thymer/`
+- **Linux**: `~/.local/share/thymer/`
+- **Windows**: `%LOCALAPPDATA%/Thymer/`
+
+Data includes:
+- Timer sessions with duration and laps
+- Daily/weekly statistics
+- Habit streak tracking
+- Export to JSON for backup
 
 ## Installation
 
@@ -83,6 +99,8 @@ thymer
 | `N` | Create new timer |
 | `D` | Delete current timer |
 | `↑/↓` | Navigate between timers |
+| `A` | Show analytics & habit tracking |
+| `E` | Export data to JSON |
 | `Q` | Quit application |
 
 ## Development

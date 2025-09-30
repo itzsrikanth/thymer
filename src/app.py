@@ -11,8 +11,11 @@ from rich.panel import Panel
 from rich.table import Table
 from typing import List
 import asyncio
+from datetime import datetime
 
-from thymer.timer import Timer, format_time
+from src.timer import Timer, format_time
+from src.storage import ThymerStorage, Session
+from src.analytics import AnalyticsDisplay
 
 
 class TimerDisplay(Static):
@@ -94,6 +97,8 @@ class ThymerApp(App):
         Binding("up", "prev_timer", "↑ Prev"),
         Binding("down", "next_timer", "↓ Next"),
         Binding("d", "delete_timer", "Delete"),
+        Binding("a", "show_analytics", "Analytics"),
+        Binding("e", "export_data", "Export"),
         Binding("?", "show_help", "Help"),
     ]
     
@@ -106,6 +111,10 @@ class ThymerApp(App):
         self.timers = [Timer(name="Timer 1")]
         self.selected_index = 0
         self._update_task = None
+        
+        # Initialize storage and analytics
+        self.storage = ThymerStorage()
+        self.analytics = AnalyticsDisplay(self.storage)
     
     def compose(self) -> ComposeResult:
         """Compose the TUI layout."""
@@ -148,7 +157,23 @@ class ThymerApp(App):
     def action_reset(self) -> None:
         """Reset the selected timer."""
         if self.timers:
-            self.timers[self.selected_index].reset()
+            timer = self.timers[self.selected_index]
+            
+            # Save session if timer has been used
+            if timer.get_time() > 0 and timer.session_start:
+                try:
+                    session = Session(
+                        timer_name=timer.name,
+                        start_time=timer.session_start,
+                        end_time=datetime.now(),
+                        duration=timer.get_time(),
+                        laps=[lap.duration for lap in timer.laps]
+                    )
+                    self.storage.save_session(session)
+                except Exception as e:
+                    self.notify(f"Failed to save session: {e}", title="Warning", timeout=3)
+            
+            timer.reset()
             self._update_displays()
     
     def action_new_timer(self) -> None:
@@ -178,6 +203,22 @@ class ThymerApp(App):
             self.selected_index = (self.selected_index + 1) % len(self.timers)
             self._update_selection()
     
+    def action_show_analytics(self) -> None:
+        """Show analytics and habit tracking."""
+        try:
+            self.analytics.show_full_analytics()
+            input("\nPress Enter to return to timer...")
+        except Exception as e:
+            self.notify(f"Error showing analytics: {e}", title="Error", timeout=5)
+    
+    def action_export_data(self) -> None:
+        """Export analytics data."""
+        try:
+            filepath = self.analytics.export_data()
+            self.notify(f"Data exported to: {filepath}", title="Export Complete", timeout=5)
+        except Exception as e:
+            self.notify(f"Export failed: {e}", title="Error", timeout=5)
+    
     def action_show_help(self) -> None:
         """Show help information."""
         help_text = """
@@ -189,6 +230,8 @@ class ThymerApp(App):
         N     : Create new timer
         D     : Delete timer (min 1)
         ↑/↓   : Navigate timers
+        A     : Show analytics
+        E     : Export data
         ?     : Show this help
         Q     : Quit application
         """

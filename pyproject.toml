@@ -36,7 +36,7 @@ dev = [
 ]
 
 [project.scripts]
-thymer = "thymer.app:main"
+thymer = "src.app:main"
 
 [project.urls]
 Homepage = "https://github.com/itzsrikanth/thymer"
